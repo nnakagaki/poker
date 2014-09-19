@@ -138,6 +138,135 @@ describe Hand do
     end
   end
 
-  it "determines if it beats another hand"
+  describe "determines if it beats another hand" do
+
+    it "royal flush beats full house" do
+      royal_flush = Hand.new(deck)
+      full_house = Hand.new(deck)
+
+      a = Card.new(:clubs, :ace)
+      b = Card.new(:clubs, :king)
+      c = Card.new(:clubs, :queen)
+      d = Card.new(:clubs, :jack)
+      e = Card.new(:clubs, :ten)
+      royal_flush.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :ace)
+      b = Card.new(:spades, :ace)
+      c = Card.new(:diamonds, :ace)
+      d = Card.new(:hearts, :nine)
+      e = Card.new(:clubs, :nine)
+      full_house.cards = [a, b, c, d, e]
+
+      expect(royal_flush.beats?(full_house)).to be true
+    end
+
+    it "full house of 10's over 2's beats full house of 3's over 4's" do
+      hand1 = Hand.new(deck)
+      hand2 = Hand.new(deck)
+
+      a = Card.new(:clubs, :three)
+      b = Card.new(:diamonds, :three)
+      c = Card.new(:hearts, :three)
+      d = Card.new(:spades, :four)
+      e = Card.new(:clubs, :four)
+      hand1.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :ten)
+      b = Card.new(:spades, :ten)
+      c = Card.new(:diamonds, :ten)
+      d = Card.new(:hearts, :deuce)
+      e = Card.new(:clubs, :deuce)
+      hand2.cards = [a, b, c, d, e]
+
+      expect(hand1.beats?(hand2)).to be false
+    end
+
+    it "two pair of 10's and 5's beats two pair of 10's and 4's" do
+      hand1 = Hand.new(deck)
+      hand2 = Hand.new(deck)
+
+      a = Card.new(:hearts, :ten)
+      b = Card.new(:diamonds, :ten)
+      c = Card.new(:hearts, :three)
+      d = Card.new(:spades, :four)
+      e = Card.new(:clubs, :four)
+      hand1.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :ten)
+      b = Card.new(:spades, :ten)
+      c = Card.new(:diamonds, :three)
+      d = Card.new(:hearts, :five)
+      e = Card.new(:clubs, :five)
+      hand2.cards = [a, b, c, d, e]
+
+      expect(hand1.beats?(hand2)).to be false
+    end
+
+    it "nothing of K,Q,J,10,3 beats nothing of K,Q,J,10,2" do
+      hand1 = Hand.new(deck)
+      hand2 = Hand.new(deck)
+
+      a = Card.new(:hearts, :king)
+      b = Card.new(:diamonds, :queen)
+      c = Card.new(:hearts, :jack)
+      d = Card.new(:spades, :ten)
+      e = Card.new(:clubs, :three)
+      hand1.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :king)
+      b = Card.new(:spades, :queen)
+      c = Card.new(:diamonds, :jack)
+      d = Card.new(:hearts, :ten)
+      e = Card.new(:clubs, :deuce)
+      hand2.cards = [a, b, c, d, e]
+
+      expect(hand1.beats?(hand2)).to be true
+    end
+
+    it "suits beat each other in flushes" do
+      hand1 = Hand.new(deck)
+      hand2 = Hand.new(deck)
+
+      a = Card.new(:hearts, :king)
+      b = Card.new(:hearts, :queen)
+      c = Card.new(:hearts, :jack)
+      d = Card.new(:hearts, :ten)
+      e = Card.new(:hearts, :three)
+      hand1.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :king)
+      b = Card.new(:clubs, :queen)
+      c = Card.new(:clubs, :jack)
+      d = Card.new(:clubs, :ten)
+      e = Card.new(:clubs, :three)
+      hand2.cards = [a, b, c, d, e]
+
+      expect(hand1.beats?(hand2)).to be true
+    end
+
+    it "looks at kicker for pairs and two-pairs" do
+      hand1 = Hand.new(deck)
+      hand2 = Hand.new(deck)
+
+      a = Card.new(:hearts, :king)
+      b = Card.new(:diamonds, :king)
+      c = Card.new(:clubs, :jack)
+      d = Card.new(:spades, :jack)
+      e = Card.new(:spades, :three)
+      hand1.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :king)
+      b = Card.new(:spades, :king)
+      c = Card.new(:diamonds, :jack)
+      d = Card.new(:hearts, :jack)
+      e = Card.new(:clubs, :three)
+      hand2.cards = [a, b, c, d, e]
+
+      expect(hand1.beats?(hand2)).to be true
+    end
+
+
+  end
 
 end
