@@ -1,4 +1,5 @@
 require "deck"
+require "card"
 
 class Hand
   HAND_STRENGTH = {
@@ -50,9 +51,38 @@ class Hand
   end
 
   def beats?(other_hand)
-    return true if HAND_STRENGTH[self.type] > HAND_STRENGTH[other_hand.type]
-    return false if HAND_STRENGTH[self.type] < HAND_STRENGTH[other_hand.type]
+    p my_power = determine_power(self).sort!.reverse
+    p their_power = determine_power(other_hand).sort!.reverse
 
+    a = my_power.count
+
+    4.times do |index1|
+      a.times do |index2|
+        p my_power[index2][index1]
+        return true if my_power[index2][index1] > their_power[index2][index1]
+        return false if my_power[index2][index1] < their_power[index2][index1]
+      end
+    end
+  end
+
+  def determine_power(the_hand)
+    hand_strength = HAND_STRENGTH[the_hand.type]
+    p the_cards = the_hand.cards
+    groups = Hash.new([])
+    the_cards.each { |card| groups[card.value] += [card] }
+    power = []
+    groups.keys.each do |card_val|
+      if card_val == :ace && the_hand.straight? &&  groups.keys.include?(:three)
+        card_val_num = Card::VALUE_NUMBERS[card_val][0]
+      elsif card_val == :ace
+        card_val_num = Card::VALUE_NUMBERS[card_val][1]
+      else
+        card_val_num = Card::VALUE_NUMBERS[card_val]
+      end
+      power << [hand_strength, groups[card_val].count, card_val_num, SUIT_STRENGTH[groups[card_val][0].suit]]
+    end
+
+    power
   end
 
   def straight?

@@ -53,6 +53,6 @@ class Card
   end
 
   def inspect
-    "#{suit}, #{value}"
+    "[#{suit}, #{value}]"
   end
 end

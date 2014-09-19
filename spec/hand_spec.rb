@@ -266,6 +266,26 @@ describe Hand do
       expect(hand1.beats?(hand2)).to be true
     end
 
+    it "deals with straight from ace to five" do
+      hand1 = Hand.new(deck)
+      hand2 = Hand.new(deck)
+
+      a = Card.new(:hearts, :ace)
+      b = Card.new(:diamonds, :deuce)
+      c = Card.new(:clubs, :three)
+      d = Card.new(:spades, :four)
+      e = Card.new(:spades, :five)
+      hand1.cards = [a, b, c, d, e]
+
+      a = Card.new(:clubs, :deuce)
+      b = Card.new(:spades, :three)
+      c = Card.new(:diamonds, :four)
+      d = Card.new(:hearts, :five)
+      e = Card.new(:clubs, :six)
+      hand2.cards = [a, b, c, d, e]
+
+      expect(hand1.beats?(hand2)).to be false
+    end
 
   end
 
